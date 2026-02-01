@@ -4,60 +4,58 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <style>
-        body, html { 
-            margin: 0; 
-            padding: 0; 
-            height: 100%; 
-            width: 100%; 
-            overflow: hidden; 
-            background-color: transparent !important; 
-        }
+    :root {
+        /* Notion's Exact HEX Colors */
+        --notion-light: #ffffff;
+        --notion-dark: #191919;
+    }
 
-        #banner-container {
-            position: relative;
-            width: 100%;
-            height: 100vh;
-            overflow: hidden;
-            border-radius: 20px; /* Slightly more rounded for that "poppy" look */
-            background-color: transparent;
-        }
-        
-        #dynamicImage { 
-            width: 100%; 
-            height: 100%; 
-            object-fit: cover; 
-            object-position: bottom; 
-            transition: opacity 1.2s ease-in-out;
-            opacity: 1;
-            display: block;
-        }
+    body, html { 
+        margin: 0; 
+        padding: 0; 
+        height: 100%; 
+        width: 100%; 
+        overflow: hidden; 
+        /* This detects if your system/Notion is in dark mode */
+        background-color: var(--notion-light);
+    }
 
-        /* The Film Grain Overlay */
-        .overlay {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            pointer-events: none; /* Allows you to still click/drag the widget */
-            
-            /* This creates the grain using a base64 noise texture */
-            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
-            opacity: 0.06; /* Adjust this (0.01 to 0.1) to make grain heavier or lighter */
-            mix-blend-mode: overlay;
+    @media (prefers-color-scheme: dark) {
+        body, html {
+            background-color: var(--notion-dark);
         }
+    }
 
-        /* Subtle Vignette to make it look cinematic */
-        .vignette {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            box-shadow: inset 0 0 100px rgba(0,0,0,0.2);
-            pointer-events: none;
-        }
-    </style>
+    #banner-container {
+        position: relative;
+        width: 100%;
+        height: 100%;
+        overflow: hidden;
+        border-radius: 20px;
+        /* Matches the background so corners look "cut" */
+        background-color: inherit; 
+    }
+    
+    #dynamicImage { 
+        width: 100%; 
+        height: 100%; 
+        object-fit: cover; 
+        object-position: bottom; 
+        display: block;
+    }
+
+    .overlay {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        pointer-events: none;
+        background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+        opacity: 0.05;
+        mix-blend-mode: overlay;
+    }
+</style>
 </head>
 <body>
 
