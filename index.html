@@ -10,28 +10,52 @@
             height: 100%; 
             width: 100%; 
             overflow: hidden; 
-            background-color: transparent; 
+            background-color: transparent !important; 
         }
 
         #banner-container {
+            position: relative;
             width: 100%;
             height: 100vh;
             overflow: hidden;
-            /* Added 15px rounded corners to match Notion's UI */
-            border-radius: 15px; 
+            border-radius: 20px; /* Slightly more rounded for that "poppy" look */
+            background-color: transparent;
         }
         
         #dynamicImage { 
             width: 100%; 
             height: 100%; 
-            /* This is the magic: it fills the box and focuses on the bottom */
             object-fit: cover; 
             object-position: bottom; 
-            
             transition: opacity 1.2s ease-in-out;
             opacity: 1;
-            user-select: none;
-            -webkit-user-drag: none;
+            display: block;
+        }
+
+        /* The Film Grain Overlay */
+        .overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none; /* Allows you to still click/drag the widget */
+            
+            /* This creates the grain using a base64 noise texture */
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+            opacity: 0.06; /* Adjust this (0.01 to 0.1) to make grain heavier or lighter */
+            mix-blend-mode: overlay;
+        }
+
+        /* Subtle Vignette to make it look cinematic */
+        .vignette {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            box-shadow: inset 0 0 100px rgba(0,0,0,0.2);
+            pointer-events: none;
         }
     </style>
 </head>
@@ -39,6 +63,8 @@
 
     <div id="banner-container">
         <img id="dynamicImage" src="" alt="Mood Banner">
+        <div class="vignette"></div>
+        <div class="overlay"></div>
     </div>
 
     <script>
@@ -47,15 +73,19 @@
             const imgElement = document.getElementById('dynamicImage');
             let newSrc = "";
 
+            // 5AM - 10AM
             if (hour >= 5 && hour < 10) {
                 newSrc = "https://preview.redd.it/i-uploaded-this-couple-days-ago-but-the-images-got-deleted-v0-ploayq30chjc1.jpg?width=1080&crop=smart&auto=webp&s=8a3b067618095d834b244fd927721213adf25c2d";
             } 
+            // 10AM - 4PM
             else if (hour >= 10 && hour < 16) {
                 newSrc = "https://preview.redd.it/i-uploaded-this-couple-days-ago-but-the-images-got-deleted-v0-nd8fjq30chjc1.jpg?width=1080&crop=smart&auto=webp&s=677f358bf527c06577c8efd9cbb849ffb0c4053a";
             } 
+            // 4PM - 8PM
             else if (hour >= 16 && hour < 20) {
                 newSrc = "https://preview.redd.it/i-uploaded-this-couple-days-ago-but-the-images-got-deleted-v0-jxi5ts30chjc1.jpg?width=1080&crop=smart&auto=webp&s=38dde8735983e11f8739310d1b77fee6a71267d4";
             } 
+            // 8PM - 5AM
             else {
                 newSrc = "https://preview.redd.it/i-uploaded-this-couple-days-ago-but-the-images-got-deleted-v0-p6lfnq30chjc1.jpg?width=1080&crop=smart&auto=webp&s=d54d300e8e685517abdcabcbb742afe599cdedf2";
             }
@@ -70,7 +100,7 @@
         }
 
         updateWallpaper();
-        setInterval(updateWallpaper, 300000); // Check every 5 mins
+        setInterval(updateWallpaper, 300000);
     </script>
 </body>
 </html>
