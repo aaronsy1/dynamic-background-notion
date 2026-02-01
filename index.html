@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dynamic Notion Mood</title>
+    <style>
+        body, html { 
+            margin: 0; 
+            padding: 0; 
+            height: 100%; 
+            width: 100%; 
+            overflow: hidden; 
+            background-color: #191919; /* Matches Notion Dark Mode */
+        }
+        
+        #dynamicImage { 
+            width: 100%; 
+            height: 100%; 
+            object-fit: cover; 
+            transition: opacity 1.5s ease-in-out;
+            opacity: 1;
+        }
+
+        /* Prevent image dragging */
+        img { user-select: none; -webkit-user-drag: none; }
+    </style>
+</head>
+<body>
+
+    <img id="dynamicImage" src="" alt="Dynamic Background">
+
+    <script>
+        function updateWallpaper() {
+            const hour = new Date().getHours();
+            const imgElement = document.getElementById('dynamicImage');
+            let newSrc = "";
+
+            // 5 AM - 10 AM: Morning
+            if (hour >= 5 && hour < 10) {
+                newSrc = "https://preview.redd.it/i-uploaded-this-couple-days-ago-but-the-images-got-deleted-v0-ploayq30chjc1.jpg?width=1080&crop=smart&auto=webp&s=8a3b067618095d834b244fd927721213adf25c2d";
+            } 
+            // 10 AM - 4 PM: Day
+            else if (hour >= 10 && hour < 16) {
+                newSrc = "https://preview.redd.it/i-uploaded-this-couple-days-ago-but-the-images-got-deleted-v0-nd8fjq30chjc1.jpg?width=1080&crop=smart&auto=webp&s=677f358bf527c06577c8efd9cbb849ffb0c4053a";
+            } 
+            // 4 PM - 8 PM: Afternoon/Sunset
+            else if (hour >= 16 && hour < 20) {
+                newSrc = "https://preview.redd.it/i-uploaded-this-couple-days-ago-but-the-images-got-deleted-v0-jxi5ts30chjc1.jpg?width=1080&crop=smart&auto=webp&s=38dde8735983e11f8739310d1b77fee6a71267d4";
+            } 
+            // 8 PM - 5 AM: Night
+            else {
+                newSrc = "https://preview.redd.it/i-uploaded-this-couple-days-ago-but-the-images-got-deleted-v0-p6lfnq30chjc1.jpg?width=1080&crop=smart&auto=webp&s=d54d300e8e685517abdcabcbb742afe599cdedf2";
+            }
+
+            // Only update if the source has actually changed to avoid unnecessary flickering
+            if (imgElement.src !== newSrc) {
+                imgElement.style.opacity = 0;
+                setTimeout(() => {
+                    imgElement.src = newSrc;
+                    imgElement.style.opacity = 1;
+                }, 1500); 
+            }
+        }
+
+        // Run on load
+        updateWallpaper();
+        
+        // Check every 5 minutes to see if we've crossed into a new time bracket
+        setInterval(updateWallpaper, 300000);
+    </script>
+</body>
+</html>index.html
